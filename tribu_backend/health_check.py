@@ -85,3 +85,48 @@ def run_migrations(request):
             'error': str(e)
         }, status=500)
 
+
+def make_migrations(request):
+    """Crear archivos de migración para las apps"""
+    try:
+        # Capturar output
+        output = StringIO()
+        
+        # Crear migraciones para todas las apps
+        call_command('makemigrations', stdout=output, interactive=False)
+        
+        makemigrations_output = output.getvalue()
+        
+        # Ahora ejecutar las migraciones
+        migrate_output = StringIO()
+        call_command('migrate', stdout=migrate_output, interactive=False)
+        
+        migrate_result = migrate_output.getvalue()
+        
+        # Verificar tablas
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                SELECT table_name 
+                FROM information_schema.tables 
+                WHERE table_schema='public'
+                ORDER BY table_name
+            """)
+            tables = [row[0] for row in cursor.fetchall()]
+        
+        return JsonResponse({
+            'status': 'success',
+            'message': 'Migraciones creadas y aplicadas correctamente',
+            'makemigrations_output': makemigrations_output,
+            'migrate_output': migrate_result,
+            'tables_created': len(tables),
+            'tables': tables
+        })
+    except Exception as e:
+        import traceback
+        return JsonResponse({
+            'status': 'error',
+            'message': 'Error al crear/ejecutar migraciones',
+            'error': str(e),
+            'traceback': traceback.format_exc()
+        }, status=500)
+

@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from .health_check import health_check, debug_info, run_migrations
+from .health_check import health_check, debug_info, run_migrations, make_migrations
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -11,6 +11,7 @@ urlpatterns = [
     path('health/', health_check, name='health_check'),
     path('debug/', debug_info, name='debug_info'),
     path('run-migrations/', run_migrations, name='run_migrations'),
+    path('make-migrations/', make_migrations, name='make_migrations'),
     
     # API Endpoints
     path('api/accounts/', include('accounts.urls')),
