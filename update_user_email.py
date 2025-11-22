@@ -14,7 +14,7 @@ def update_email():
     """Actualizar email del superusuario"""
     try:
         user = User.objects.get(username='pekita1312')
-        user.email = 'sainttrentvto@mail.com'
+        user.email = 'sainttrenvto@gmail.com'
         user.save()
         print(f"✅ Email actualizado para '{user.username}': {user.email}")
     except User.DoesNotExist:

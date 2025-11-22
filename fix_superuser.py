@@ -38,7 +38,7 @@ def fix_superuser():
         print("🔧 Creando superusuario...")
         user = User.objects.create_superuser(
             username='pekita1312',
-            email='sainttrentvto@mail.com',
+            email='sainttrenvto@gmail.com',
             password='inacap2024.'
         )
         profile = UserProfile.objects.create(user=user, role='admin')
