@@ -1,5 +1,8 @@
 from django.http import JsonResponse
 from django.db import connection
+from django.core.management import call_command
+from io import StringIO
+import sys
 
 
 def health_check(request):
@@ -46,4 +49,39 @@ def debug_info(request):
         'database_info': tables_info,
         'debug_mode': False
     })
+
+
+def run_migrations(request):
+    """Ejecutar migraciones desde el navegador"""
+    try:
+        # Capturar output
+        output = StringIO()
+        
+        # Ejecutar migraciones
+        call_command('migrate', stdout=output, interactive=False)
+        
+        migration_output = output.getvalue()
+        
+        # Verificar tablas después de migrar
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                SELECT table_name 
+                FROM information_schema.tables 
+                WHERE table_schema='public'
+            """)
+            tables = [row[0] for row in cursor.fetchall()]
+        
+        return JsonResponse({
+            'status': 'success',
+            'message': 'Migraciones ejecutadas correctamente',
+            'output': migration_output,
+            'tables_created': len(tables),
+            'tables': tables
+        })
+    except Exception as e:
+        return JsonResponse({
+            'status': 'error',
+            'message': 'Error al ejecutar migraciones',
+            'error': str(e)
+        }, status=500)
 
