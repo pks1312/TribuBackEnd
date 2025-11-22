@@ -5,7 +5,7 @@ class GalleryImage(models.Model):
     """Imágenes de la galería"""
     title = models.CharField(max_length=200, blank=True, verbose_name='Título')
     description = models.TextField(blank=True, verbose_name='Descripción')
-    image = models.ImageField(upload_to='gallery/', verbose_name='Imagen')
+    # image = models.ImageField(upload_to='gallery/', verbose_name='Imagen')  # Requiere Pillow
     image_url = models.URLField(blank=True, null=True, verbose_name='URL de Imagen')
     category = models.CharField(max_length=100, blank=True, verbose_name='Categoría')
     is_active = models.BooleanField(default=True, verbose_name='Activo')
