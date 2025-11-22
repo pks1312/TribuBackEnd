@@ -26,17 +26,26 @@ class UserViewSet(viewsets.ModelViewSet):
     
     @action(detail=False, methods=['post'], permission_classes=[AllowAny])
     def login(self, request):
-        """Login de usuario"""
-        username = request.data.get('username')
+        """Login de usuario con email o username"""
+        username_or_email = request.data.get('username') or request.data.get('email')
         password = request.data.get('password')
         
-        if not username or not password:
+        if not username_or_email or not password:
             return Response(
-                {'detail': 'Usuario y contraseña son requeridos'},
+                {'detail': 'Email/Usuario y contraseña son requeridos'},
                 status=status.HTTP_400_BAD_REQUEST
             )
         
-        user = authenticate(request, username=username, password=password)
+        # Intentar autenticar primero con username
+        user = authenticate(request, username=username_or_email, password=password)
+        
+        # Si falla, intentar buscar por email
+        if user is None:
+            try:
+                user_obj = User.objects.get(email=username_or_email)
+                user = authenticate(request, username=user_obj.username, password=password)
+            except User.DoesNotExist:
+                pass
         
         if user is not None:
             login(request, user)
