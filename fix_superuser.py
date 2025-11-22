@@ -56,42 +56,42 @@ def create_sample_data():
             'description': 'Corte de cabello profesional para caballeros',
             'price': 15000,
             'duration': 30,
-            'active': True
+            'is_active': True
         },
         {
             'name': 'Corte de Cabello Dama',
             'description': 'Corte de cabello profesional para damas',
             'price': 20000,
             'duration': 45,
-            'active': True
+            'is_active': True
         },
         {
             'name': 'Barba y Afeitado',
             'description': 'Servicio de barba y afeitado profesional',
             'price': 12000,
             'duration': 25,
-            'active': True
+            'is_active': True
         },
         {
             'name': 'Tinte',
             'description': 'Aplicación de tinte profesional',
             'price': 35000,
             'duration': 90,
-            'active': True
+            'is_active': True
         },
         {
             'name': 'Manicure',
             'description': 'Servicio de manicure completo',
             'price': 10000,
             'duration': 40,
-            'active': True
+            'is_active': True
         },
         {
             'name': 'Pedicure',
             'description': 'Servicio de pedicure completo',
             'price': 12000,
             'duration': 50,
-            'active': True
+            'is_active': True
         },
     ]
     
